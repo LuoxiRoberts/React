@@ -1,0 +1,48 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Province {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  cities  City[]
+  data    Data[]
+}
+
+model City {
+  id         Int      @id @default(autoincrement())
+  name       String
+  province   Province @relation(fields: [provinceId], references: [id])
+  provinceId Int
+  counties   County[]
+  data       Data[]
+  @@unique([name, provinceId])
+}
+
+model County {
+  id      Int    @id @default(autoincrement())
+  name    String
+  city    City   @relation(fields: [cityId], references: [id])
+  cityId  Int
+  data    Data[]
+  @@unique([name, cityId])
+}
+
+model Data {
+  id         Int      @id @default(autoincrement())
+  projectName String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  province   Province? @relation(fields: [provinceId], references: [id])
+  provinceId Int?
+  city       City?     @relation(fields: [cityId], references: [id])
+  cityId     Int?
+  county     County?   @relation(fields: [countyId], references: [id])
+  countyId   Int?
+  // ...其他字段...
+}
