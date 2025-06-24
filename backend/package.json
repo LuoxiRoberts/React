@@ -1,0 +1,26 @@
+{
+  "name": "react-hono-prisma-app",
+  "version": "1.0.0",
+  "description": "A web application to import data from xlsx to PostgreSQL with search and pagination features.",
+  "main": "src/app.ts",
+  "scripts": {
+    "dev": "ts-node src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "@prisma/client": "^4.16.2",
+    "hono": "^4.8.2",
+    "pg": "^8.0.0",
+    "prisma": "^4.0.0",
+    "redis": "^4.0.0",
+    "xlsx": "^0.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.5.0"
+  },
+  "license": "MIT"
+}
