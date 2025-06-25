@@ -10,8 +10,6 @@ const App: React.FC = () => {
   return (
     <div className={styles.App}> 
       {/* 使用 CSS 模块中的 App 类名来应用样式。 */}
-      <h1>Data Import and Management</h1> 
-      {/* 显示标题 'Data Import and Management'。 */}
       <Home /> 
       {/* 渲染 Home 组件。 */}
     </div>

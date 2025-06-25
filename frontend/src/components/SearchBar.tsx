@@ -14,9 +14,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className={styles.searchBar}> 
+    <div className={styles['search-bar']}> 
       {/* 渲染搜索栏的容器，使用类名 'search-bar'。 */}
-      <input
+      <input className={styles['search-input']}
         type="text" // 定义输入框的类型为文本。
         value={query} // 绑定输入框的值到 query 状态。
         onChange={(e) => setQuery(e.target.value)} 
@@ -24,7 +24,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         placeholder="Search..." 
         // 设置输入框的占位符文本。
       />
-      <button onClick={handleSearch}>Search</button> 
+      <button onClick={handleSearch} className={styles['search-button']}>Search</button> 
       {/* 渲染搜索按钮，点击时调用 handleSearch 函数。 */}
     </div>
   );

@@ -1,44 +1,27 @@
 import React, { useEffect, useState } from 'react'; 
-// 导入 React 库及其钩子 useEffect 和 useState，用于构建组件和管理状态。
 import DataTable from '../components/DataTable'; 
-// 导入 DataTable 组件，用于显示数据表格。
 import SearchBar from '../components/SearchBar'; 
-// 导入 SearchBar 组件，用于搜索功能。
 import Pagination from '../components/Pagination'; 
-// 导入 Pagination 组件，用于分页功能。
 import axios from 'axios'; 
-// 导入 axios 库，用于进行 HTTP 请求。
 import { DataItem } from '../types'; 
-// 导入 DataItem 类型，用于定义数据结构。
+import styles from '../styles/App.module.css'
 
 const Home: React.FC = () => { 
   // 定义 Home 组件，使用 React.FC 类型。
   const [data, setData] = useState<DataItem[]>([]); 
-  // 使用 useState 钩子定义 data 状态，初始值为空数组。
   const [loading, setLoading] = useState<boolean>(true); 
-  // 使用 useState 钩子定义 loading 状态，初始值为 true。
   const [currentPage, setCurrentPage] = useState<number>(1); 
-  // 使用 useState 钩子定义 currentPage 状态，初始值为 1。
   const itemsPerPage = 10; 
-  // 定义每页显示的项目数为 10。
   const [searchTerm, setSearchTerm] = useState<string>(''); 
-  // 使用 useState 钩子定义 searchTerm 状态，初始值为空字符串。
   const [total, setTotal] = useState<number>(0); 
-  // 使用 useState 钩子定义 total 状态，初始值为 0。
 
-  // 新增：省市县下拉
+  // 省市县下拉
   const [provinces, setProvinces] = useState<{ id: number; name: string }[]>([]); 
-  // 使用 useState 钩子定义 provinces 状态，初始值为空数组。
   const [cities, setCities] = useState<{ id: number; name: string }[]>([]); 
-  // 使用 useState 钩子定义 cities 状态，初始值为空数组。
   const [counties, setCounties] = useState<{ id: number; name: string }[]>([]); 
-  // 使用 useState 钩子定义 counties 状态，初始值为空数组。
   const [provinceId, setProvinceId] = useState<number | ''>(''); 
-  // 使用 useState 钩子定义 provinceId 状态，初始值为空字符串。
   const [cityId, setCityId] = useState<number | ''>(''); 
-  // 使用 useState 钩子定义 cityId 状态，初始值为空字符串。
   const [countyId, setCountyId] = useState<number | ''>(''); 
-  // 使用 useState 钩子定义 countyId 状态，初始值为空字符串。
 
   // 加载省份
   useEffect(() => { 
@@ -173,17 +156,15 @@ const Home: React.FC = () => {
   return (
     <div className="home"> 
       {/* 渲染 Home 组件的容器，使用类名 'home'。 */}
-      <h1>Data Management</h1> 
-      {/* 显示标题 'Data Management'。 */}
-      <div style={{ display: 'flex', gap: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
-        {/* 使用内联样式设置布局和间距。 */}
+      <h1>数据查询页面</h1> 
+      {/* 显示标题 '数据查询页面'。 */}
+      <div className={styles['filter-container']}>
         <label htmlFor="province-select" style={{ display: 'none' }}>选择省份</label> 
-        {/* 隐藏的标签，用于无障碍访问。 */}
         <select
           id="province-select" 
           // 设置选择框的 ID。
-          className="custom-select" 
-          // 使用类名 'custom-select'。
+          className={styles['custom-select']} 
+          // 使用样式类
           value={provinceId} 
           // 绑定选择框的值到 provinceId 状态。
           onChange={e => setProvinceId(e.target.value ? Number(e.target.value) : '')} 
@@ -204,8 +185,8 @@ const Home: React.FC = () => {
         <select
           id="city-select" 
           // 设置选择框的 ID。
-          className="custom-select" 
-          // 使用类名 'custom-select'。
+          className={styles['custom-select']} 
+          // 使用样式类
           value={cityId} 
           // 绑定选择框的值到 cityId 状态。
           onChange={e => setCityId(e.target.value ? Number(e.target.value) : '')} 
@@ -228,8 +209,8 @@ const Home: React.FC = () => {
         <select
           id="county-select" 
           // 设置选择框的 ID。
-          className="custom-select" 
-          // 使用类名 'custom-select'。
+          className={styles['custom-select']} 
+          // 使用样式类
           value={countyId} 
           // 绑定选择框的值到 countyId 状态。
           onChange={e => setCountyId(e.target.value ? Number(e.target.value) : '')} 

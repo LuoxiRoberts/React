@@ -20,9 +20,6 @@ app.get('/', async (c) => { // 定义 GET 请求的路由处理器。
     if (cityId && !isNaN(Number(cityId))) where.cityId = Number(cityId); // 如果有 cityId，添加查询条件。
     if (countyId && !isNaN(Number(countyId))) where.countyId = Number(countyId); // 如果有 countyId，添加查询条件。
 
-    // eslint-disable-next-line no-console
-    console.log('[data.ts] 最终where:', JSON.stringify(where)); // 输出最终的查询条件。
-
     const data = await prisma.data.findMany({ // 查询符合条件的数据。
       skip: (page - 1) * limit, // 跳过前面的数据，用于分页。
       take: limit, // 限制返回的数据条数。
@@ -37,9 +34,6 @@ app.get('/', async (c) => { // 定义 GET 请求的路由处理器。
     const total = await prisma.data.count({ // 计算符合条件的数据总数。
       where: Object.keys(where).length ? where : undefined,
     });
-
-    // eslint-disable-next-line no-console
-    console.log('[data.ts] 返回数据条数:', data.length, '总数:', total); // 输出返回的数据条数和总数。
 
     return c.json({ data, total }); // 返回数据和总数的 JSON 响应。
   } catch (error) {
