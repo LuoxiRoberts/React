@@ -4,7 +4,22 @@ import { PrismaClient } from '@prisma/client'; // 导入 PrismaClient，用于�
 const app = new Hono(); // 创建 Hono 应用实例。
 const prisma = new PrismaClient(); // 创建 PrismaClient 实例，用于数据库操作。
 
-app.get('/', async (c) => { // 定义 GET 请求的路由处理器。
+/**
+ * @swagger
+ * /data:
+ *   get:
+ *     summary: Retrieve a list of data
+ *     responses:
+ *       200:
+ *         description: A list of data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ */
+app.get('/data', async (c) => { // 定义 GET 请求的路由处理器。
   const page = Number(c.req.query('page') ?? 1); // 获取查询参数 'page'，默认为 1。
   const limit = Number(c.req.query('limit') ?? 10); // 获取查询参数 'limit'，默认为 10。
   const search = c.req.query('search') ?? ''; // 获取查询参数 'search'，默认为空字符串。
