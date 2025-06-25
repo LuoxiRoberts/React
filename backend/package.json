@@ -1,7 +1,7 @@
 {
   "name": "react-hono-prisma-app",
   "version": "1.0.0",
-  "description": "A web application to import data from xlsx to PostgreSQL with search and pagination features.",
+  "description": "用于查询1w+数据的搜索的网页应用，使用Hono作为Web框架，Prisma作为ORM，PostgreSQL作为数据库，Redis作为缓存。",
   "main": "src/app.ts",
   "scripts": {
     "dev": "ts-node src/app.ts",

@@ -1,48 +1,47 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"         // 指定数据库提供者为 PostgreSQL。
+  url      = env("DATABASE_URL") // 使用环境变量设置数据库连接 URL。
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" // 生成用于与数据库交互的 JavaScript Prisma 客户端。
 }
 
 model Province {
-  id      Int     @id @default(autoincrement())
-  name    String  @unique
-  cities  City[]
-  data    Data[]
+  id      Int     @id @default(autoincrement())    // 主键，自动递增的整数。
+  name    String  @unique                         // 省份名称具有唯一约束。
+  cities  City[]                                 // 与 City 模型的一对多关系。
+  data    Data[]                                // 与 Data 模型的一对多关系。
 }
 
 model City {
-  id         Int      @id @default(autoincrement())
-  name       String
-  province   Province @relation(fields: [provinceId], references: [id])
-  provinceId Int
-  counties   County[]
-  data       Data[]
-  @@unique([name, provinceId])
+  id         Int      @id @default(autoincrement())                        // 主键，自动递增的整数。
+  name       String                                                       // 城市名称。
+  province   Province @relation(fields: [provinceId], references: [id])  // 外键关系，关联到 Province。
+  provinceId Int                                                        // Province 关系的外键字段。
+  counties   County[]                                                  // 与 County 模型的一对多关系。
+  data       Data[]                                                   // 与 Data 模型的一对多关系。
+  @@unique([name, provinceId])                                       // 在 name 和 provinceId 上的复合唯一约束。
 }
 
 model County {
-  id      Int    @id @default(autoincrement())
-  name    String
-  city    City   @relation(fields: [cityId], references: [id])
-  cityId  Int
-  data    Data[]
-  @@unique([name, cityId])
+  id      Int    @id @default(autoincrement())                   // 主键，自动递增的整数。
+  name    String                                                // 县/区名称。
+  city    City   @relation(fields: [cityId], references: [id]) // 外键关系，关联到 City。
+  cityId  Int                                                 // City 关系的外键字段。
+  data    Data[]                                             // 与 Data 模型的一对多关系。
+  @@unique([name, cityId])                                  // 在 name 和 cityId 上的复合唯一约束。
 }
 
 model Data {
-  id         Int      @id @default(autoincrement())
-  projectName String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  province   Province? @relation(fields: [provinceId], references: [id])
-  provinceId Int?
-  city       City?     @relation(fields: [cityId], references: [id])
-  cityId     Int?
-  county     County?   @relation(fields: [countyId], references: [id])
-  countyId   Int?
-  // ...其他字段...
+  id         Int      @id @default(autoincrement())                            // 主键，自动递增的整数。
+  projectName String                                                          // 项目名称。
+  createdAt  DateTime @default(now())                                        // 记录创建的时间戳，默认为当前时间。
+  updatedAt  DateTime @updatedAt                                            // 记录最后更新的时间戳，自动更新。
+  province   Province? @relation(fields: [provinceId], references: [id])   // 可选的外键关系，关联到 Province。
+  provinceId Int?                                                         // Province 关系的可选外键字段。
+  city       City?     @relation(fields: [cityId], references: [id])     // 可选的外键关系，关联到 City。
+  cityId     Int?                                                       // City 关系的可选外键字段。
+  county     County?   @relation(fields: [countyId], references: [id]) // 可选的外键关系，关联到 County。
+  countyId   Int?                                                     // County 关系的可选外键字段。
 }

@@ -1,99 +1,29 @@
-import { PrismaClient } from '@prisma/client';
-import { importAllDivisionsFromXlsx } from '../src/services/regionService';
-import * as XLSX from 'xlsx';
 
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client'; // 导入 PrismaClient，用于与数据库交互。
+import { importAllDivisionsFromXlsx } from '../src/services/regionService'; // 导入自定义服务函数，用于从 XLSX 文件导入行政区划。
+import { importAllDataFromXlsx } from '../src/services/dataService'; // Import the function directly
+import DataService from '../src/services/dataService'; // 导入 DataService 类，用于处理数据导入。
+import * as XLSX from 'xlsx'; // 导入 XLSX 库，用于读取和解析 Excel 文件。
+import Redis from 'ioredis';
 
-/**
- * 导入市政业绩数据到 data 表，允许部分字段为空（只要有项目名称就导入）
- */
-async function importAllDataFromXlsxNoDuplicate(prisma: PrismaClient, xlsxPath: string) {
-  const workbook = XLSX.readFile(xlsxPath);
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
-  const rows: { [key: string]: string }[] = XLSX.utils.sheet_to_json(worksheet);
-
-  const data: { projectName: string; provinceId?: number; cityId?: number; countyId?: number }[] = [];
-  for (const row of rows) {
-    // 自动查找表头，兼容空格和不同写法
-    const projectName =
-      (row['项目名称'] || row['projectName'] || row['project'] || '').toString().trim();
-    const provinceName =
-      (row['省'] || row['province'] || '').toString().trim();
-    const cityName =
-      (row['市'] || row['city'] || '').toString().trim();
-    // 兼容 district/县/区
-    const countyName =
-      (row['县'] || row['区'] || row['county'] || row['district'] || '').toString().trim();
-
-    let provinceId: number | undefined;
-    let cityId: number | undefined;
-    let countyId: number | undefined;
-
-    if (provinceName) {
-      const province = await prisma.province.findUnique({ where: { name: provinceName } });
-      provinceId = province?.id;
-    }
-    if (provinceId && cityName) {
-      const city = await prisma.city.findUnique({ where: { name_provinceId: { name: cityName, provinceId } } });
-      cityId = city?.id;
-    }
-    if (cityId && countyName) {
-      const county = await prisma.county.findUnique({ where: { name_cityId: { name: countyName, cityId } } });
-      countyId = county?.id;
-    }
-
-    if (projectName) {
-      // 检查是否已存在完全相同的数据
-      const exists = await prisma.data.findFirst({
-        where: {
-          projectName,
-          provinceId: provinceId ?? undefined,
-          cityId: cityId ?? undefined,
-          countyId: countyId ?? undefined,
-        },
-      });
-      if (!exists) {
-        data.push({
-          projectName,
-          provinceId,
-          cityId,
-          countyId,
-        });
-      }
-    }
-  }
-
-  if (data.length === 0) {
-    console.log('无新数据需要导入');
-    return;
-  }
-  const BATCH_SIZE = 1000;
-  for (let i = 0; i < data.length; i += BATCH_SIZE) {
-    const batch = data.slice(i, i + BATCH_SIZE);
-    await prisma.data.createMany({
-      data: batch,
-      skipDuplicates: true,
-    });
-  }
-  console.log('市政业绩数据导入完成');
-}
+const prisma = new PrismaClient(); // 创建 PrismaClient 实例，用于数据库操作。
+const redisClient = new Redis(); // 创建 Redis 客户端实例
+const dataService = new DataService(prisma, redisClient); // 创建 DataService 实例
 
 async function main() {
-  // 导入全国行政区划
-  const regionXlsxPath = 'd:/Java/project/react-hono-prisma-app/全国行政区域.xlsx';
-  await importAllDivisionsFromXlsx(prisma, regionXlsxPath);
+  const regionXlsxPath = 'd:/Java/project/react-hono-prisma-app/全国行政区域.xlsx'; // 定义行政区划 Excel 文件路径。
+  await importAllDivisionsFromXlsx(prisma, regionXlsxPath); // 调用函数导入行政区划数据。
 
-  // 导入市政业绩，允许部分字段为空
-  const dataXlsxPath = 'd:/Java/project/react-hono-prisma-app/市政项目地理位置.xlsx';
-  await importAllDataFromXlsxNoDuplicate(prisma, dataXlsxPath);
+  const dataXlsxPath = 'd:/Java/project/react-hono-prisma-app/市政项目地理位置.xlsx'; // 定义市政项目 Excel 文件路径。
+  await importAllDataFromXlsx(prisma, dataXlsxPath); // Call the function directly
 
-  await prisma.$disconnect();
+  await prisma.$disconnect(); // 断开与数据库的连接。
+  await redisClient.quit(); // 断开与 Redis 的连接
 }
 
 main().catch(e => {
-  console.error(e);
-  process.exit(1);
+  console.error(e); // 捕获并输出错误。
+  process.exit(1); // 以错误状态退出进程。
 });
 
 // 1. 确保 .env 数据库配置正确，且已执行 npx prisma migrate dev
