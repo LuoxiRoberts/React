@@ -92,9 +92,4 @@ react-hono-prisma-app
 
 ---
 
-## 部署建议
-
-- 推荐使用 Vercel、Heroku、DigitalOcean 等平台部署
-- 绑定自定义域名并配置 SSL，保障数据安全
-
 

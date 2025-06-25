@@ -49,4 +49,4 @@ frontend
 1. **安装依赖**: 在 `frontend` 目录下运行 `npm install`。
 2. **启动开发服务器**: 在 `frontend` 目录下运行 `npm start`，默认在 `http://localhost:3000` 访问。
 3. **构建应用**: 运行 `npm run build` 生成生产环境的静态文件。 
-4. **部署**: 将 `build` 目录中的文件部署到静态文件服务器或云平台。
+
