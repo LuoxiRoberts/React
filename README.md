@@ -1,9 +1,3 @@
-<p align="center">
-  <a href="https://www.mindskip.net" target="_blank">
-    <img src="https://www.mindskip.net/style/git/images/logo/1.png" height="80"/>
-  </a>
-</p>
-
 # React Hono Prisma App
 
 ## 项目简介
@@ -104,24 +98,3 @@ react-hono-prisma-app
 - 推荐使用 Vercel、Heroku、DigitalOcean 等平台部署
 - 绑定自定义域名并配置 SSL，保障数据安全
 
----
-
-## License
-
-MIT License
-
-## 关于 Git LF/CRLF 警告
-
-如果你在 `git add .` 时看到如下警告：
-```
-Warning: LF will be replaced by CRLF in <file>.
-The file will have its original line endings in your working directory
-```
-
-这是因为 Git 在 Windows 和类 Unix 系统间转换行结束符造成的。你可以通过以下命令来解决：
-
-```bash
-git config --global core.autocrlf true
-```
-
-这会在检出代码时将 LF 转换为 CRLF，在提交代码时将 CRLF 转换回 LF。
