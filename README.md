@@ -92,4 +92,22 @@ react-hono-prisma-app
 
 ---
 
+## 数据库备份
 
+项目根目录包含一个 `database_backup.sql` 文件，其中包含 PostgreSQL 数据库的表结构和数据。
+
+### 恢复数据库
+
+要恢复数据库，请使用以下命令：
+
+```bash
+# 恢复数据库
+psql -U myuser -d mydatabase -f "d:\Java\project\react-hono-prisma-app\database_backup.sql"
+
+### 注意事项
+
+- 确保您有权限访问数据库，并且 `pg_dump` 和 `psql` 工具已安装在您的系统中。
+- 根据您的实际数据库名称、用户名和路径调整命令。
+- 如果数据库包含敏感数据，请谨慎处理导出的 SQL 文件。
+
+通过这些步骤，您可以将 PostgreSQL 数据库的表结构和内容保存到项目的根目录，并在需要时轻松恢复数据库。
