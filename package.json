@@ -6,6 +6,7 @@
     "hono": "^4.8.2",
     "ioredis": "^5.6.1",
     "react-dom": "^19.1.0",
+    "swagger-ui-dist": "^5.25.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

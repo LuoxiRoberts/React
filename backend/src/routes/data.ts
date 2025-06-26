@@ -19,7 +19,7 @@ const prisma = new PrismaClient(); // 创建 PrismaClient 实例，用于数据�
  *               items:
  *                 type: object
  */
-app.get('/data', async (c) => { // 定义 GET 请求的路由处理器。
+app.get('/', async (c) => { // 定义 GET 请求的路由处理器。
   const page = Number(c.req.query('page') ?? 1); // 获取查询参数 'page'，默认为 1。
   const limit = Number(c.req.query('limit') ?? 10); // 获取查询参数 'limit'，默认为 10。
   const search = c.req.query('search') ?? ''; // 获取查询参数 'search'，默认为空字符串。
